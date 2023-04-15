@@ -3,16 +3,37 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "prebuild": "rm -rf ./build",
+    "build": "npm run clean && next build",
+    "postbuild": "next-sitemap",
+    "dev": "npm run eslint  && npm run lint && next dev -p 3000",
+    "build-stats": "cross-env ANALYZE=true npm run build",
+    "build-prod": "run-s clean build",
+    "clean": "rimraf .next out build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export": "next export",
+    "eslint": "eslint \"**/*.+(js|jsx|ts|tsx)\"",
+    "eslint:fix": "eslint --fix \"**/*.+(js|jsx|ts|tsx)\"",
+    "prettier": "prettier --check \"**/*.+(js|jsx|ts|tsx|json|yml|yaml|md|css|scss)\"",
+    "pre-commit": "lint-staged",
+    "prepare": "husky install",
+    "check-types": "tsc --noEmit --pretty && tsc --project cypress --noEmit --pretty",
+    "test": "jest",
+    "commit": "cz",
+    "cypress": "cypress open",
+    "cypress:headless": "cypress run",
+    "e2e": "start-server-and-test dev http://localhost:3000 cypress",
+    "e2e:headless": "start-server-and-test dev http://localhost:3000 cypress:headless"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^13.3.0",
+    "@sentry/nextjs": "^7.48.0",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
     "next": "13.3.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "sass": "^1.62.0"
   }
 }
